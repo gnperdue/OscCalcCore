@@ -1,0 +1,29 @@
+OSCLIBDIR=$(shell sh -c 'cd ../lib; pwd')
+OSCINCDIR=$(shell sh -c 'cd ../OscCalc; pwd')
+
+LDLIBS = -L$(OSCLIBDIR) -lOscCalc
+INCLUDE = -I$(OSCINCDIR)
+
+CC = gcc
+
+CFLAGS = 
+LDFLAGS = 
+
+all: oscCalcTest
+
+oscCalcTest: OscCalcTester.o
+	@if test -d ../bin; then echo BinOk > /dev/null; else mkdir -p ../bin; fi
+	$(CC) $(LDFLAGS) -o oscCalcTest OscCalcTester.o $(LDLIBS)
+	mv oscCalcTest ../bin
+
+OscCalcTester.o: OscCalcTester.c
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+clean:
+	rm -rf *.dSYM/
+	rm -f *.o
+	rm -f ../bin/oscCalcTest
+
+remake:
+	make clean
+	make all

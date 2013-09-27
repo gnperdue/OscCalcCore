@@ -1,0 +1,27 @@
+# GIT_VERSION = $(shell sh -c 'git describe --abbrev=4 --dirty --always')
+
+CC        = cc
+TARGET    = libOscCalc.so
+
+CFLAGS    = -fPIC -Wall -std=c99
+CFLAGS   += -g -O0 
+#CFLAGS   += -Werror
+
+LDLIBS    =
+LDFLAGS   = -shared -Wl,-soname
+
+OBJS = $(patsubst %.c,%.o,$(wildcard *.c))
+
+$(TARGET):$(OBJS)
+	$(CC) $(LDFLAGS),$(TARGET) -o $(TARGET) $(OBJS) $(LDLIBS)
+	mv $(TARGET) ../lib
+
+$(OBJS): %.o: %.c %.h
+	@if test -d ../lib; then echo LibOk > /dev/null; else mkdir -p ../lib; fi
+	$(CC) $(INCLUDE) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f ../lib/$(TARGET)
+	rm -f *.o
+
+
