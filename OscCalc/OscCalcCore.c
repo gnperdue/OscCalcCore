@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "oscCalcCore.h"
+#include "OscCalcCore.h"
 
 void printReferences() 
 {

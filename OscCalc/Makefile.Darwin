@@ -24,7 +24,7 @@ $(OBJS): %.o: %.c %.h
 	$(CC) $(INCLUDE) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm ../lib/$(TARGET)
-	rm *.o
+	rm -f ../lib/$(TARGET)
+	rm -f *.o
 
 
