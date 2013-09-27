@@ -20,7 +20,7 @@ $(TARGET):$(OBJS)
 
 # The `@` sign makes the line silent in the build.
 $(OBJS): %.o: %.c %.h
-	@if test -d ../lib; then echo LibOk; else mkdir -p ../lib; fi
+	@if test -d ../lib; then echo LibOk > /dev/null; else mkdir -p ../lib; fi
 	$(CC) $(INCLUDE) $(CFLAGS) -c $< -o $@
 
 clean:
