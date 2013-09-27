@@ -1,0 +1,30 @@
+# GIT_VERSION = $(shell sh -c 'git describe --abbrev=4 --dirty --always')
+
+CC        = gcc
+#TARGET    = libOscCalc.so
+TARGET    = libOscCalc.dylib
+
+CFLAGS    = -fPIC -Wall
+CFLAGS   += -g -O0 
+#CFLAGS   += -Werror
+
+LDLIBS    =
+#LDFLAGS   = -shared -Wl,-soname
+LDFLAGS   = -dynamiclib 
+
+OBJS = $(patsubst %.c,%.o,$(wildcard *.c))
+
+$(TARGET):$(OBJS)
+	$(CC) $(LDFLAGS) -o $(TARGET) $(OBJS) $(LDLIBS)
+	mv $(TARGET) ../lib
+
+# The `@` sign makes the line silent in the build.
+$(OBJS): %.o: %.c %.h
+	@if test -d ../lib; then echo LibOk; else mkdir -p ../lib; fi
+	$(CC) $(INCLUDE) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm ../lib/$(TARGET)
+	rm *.o
+
+
