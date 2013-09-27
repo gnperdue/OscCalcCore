@@ -1,7 +1,7 @@
 OSCLIBDIR=$(shell sh -c 'cd ../lib; pwd')
 OSCINCDIR=$(shell sh -c 'cd ../OscCalc; pwd')
 
-LDLIBS = -L$(OSCLIBDIR) -lOscCalc
+LDLIBS = -L$(OSCLIBDIR) -lOscCalc -lm
 INCLUDE = -I$(OSCINCDIR)
 
 CC = gcc
