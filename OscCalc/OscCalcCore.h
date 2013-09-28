@@ -1,5 +1,37 @@
 #include <complex.h>
 
+struct nuOscParams {
+
+  double delta_m12_squared;
+  double delta_m23_squared;
+  double delta_m13_squared;
+
+  double delta_m21_squared;
+  double delta_m32_squared;
+  double delta_m31_squared;
+
+  double theta12;
+  double theta23;
+  double theta13;
+
+  int hierarchy;  /* negative for inverted, positive for normal */
+  int helicity;   /* negative for antinu, positive for nu */
+
+  double deltaCP;
+};
+
+//! Survivial probability for muon-flavor neutrinos in a two-flavor approximation.
+double twoFlavorMuSurvive( 
+    const struct nuOscParams* pp, 
+    double energyInGeV, 
+    double baselineInKm ); 
+
+//! Survivial probability for muon-flavor neutrinos in a three-flavor framework.
+double threeFlavorMuSurvive( 
+    const struct nuOscParams* pp, 
+    double energyInGeV,
+    double baselineInKm ); 
+
 const double L_OVER_E_CONVERTER = 1.2669;
 
 /* References : apologies to those not filled in yet! */
@@ -57,28 +89,6 @@ const double default_baseline = FNALTOSOUDAN; /* km */
 /* Default Experimental Parameters */
 const double default_energy   = 2.0;   /* GeV */
 
-struct nuOscParams {
-
-  double delta_m12_squared;
-  double delta_m23_squared;
-  double delta_m13_squared;
-
-  double delta_m21_squared;
-  double delta_m32_squared;
-  double delta_m31_squared;
-
-  double theta12;
-  double theta23;
-  double theta13;
-
-  int hierarchy;  /* negative for inverted, positive for normal */
-  int helicity;   /* negative for antinu, positive for nu */
-
-  double deltaCP;
-
-  double defaultBaseline;  /* km, need a special mechanism to make m nice? */
-  double defaultEnergy;    /* GeV, need a special concern for MeV? */
-};
 
 void printReferences();
 void printDefaultParameters();

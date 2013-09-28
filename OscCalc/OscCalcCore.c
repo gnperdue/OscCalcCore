@@ -4,51 +4,29 @@
 #include <math.h>
 #include "OscCalcCore.h"
 
-void printReferences() 
+double twoFlavorMuSurvive( const struct nuOscParams* pp, double en, double bl )
 {
-  printf("%s\n", theta12Reference);
-  printf("%s\n", theta23Reference);
-  printf("%s\n", theta13Reference);
-  printf("%s\n", deltaM12Reference);
-  printf("%s\n", deltaM23Reference);
-  printf("%s\n", deltaM13Reference);
-  printf("%s\n", globalFitsRef);
+  assert(en > 0);
+  double sdelta23 = sin( Delta23( pp, bl/en ) );
+  return 1 - SinSqrd2Theta23(pp) * sdelta23 * sdelta23; 
 }
 
-void printDefaultParameters()
+double threeFlavorMuSurvive( const struct nuOscParams* pp, double en, double bl )
 {
-  printf("default_helicity  = %d\n", default_helicity); 
-  printf("default_hierarchy = %d\n", default_hierarchy); 
-  printf("default_deltaCP   = %f\n", default_deltaCP); 
-  printf("default_dm12_squared          = %f\n", 
-      default_dm12_squared); 
-  printf("default_dm21_squared          = %f\n", 
-      default_dm21_squared); 
-  printf("default_dm31_squared_normal   = %f\n", 
-      default_dm31_squared_normal); 
-  printf("default_dm32_squared_normal   = %f\n", 
-      default_dm32_squared_normal); 
-  printf("default_dm13_squared_normal   = %f\n", 
-      default_dm13_squared_normal); 
-  printf("default_dm23_squared_normal   = %f\n", 
-      default_dm23_squared_normal); 
-  printf("default_dm32_squared_inverted = %f\n", 
-      default_dm32_squared_inverted); 
-  printf("default_dm23_squared_inverted = %f\n", 
-      default_dm23_squared_inverted); 
-  printf("default_dm13_squared_inverted = %f\n", 
-      default_dm13_squared_inverted); 
-  printf("default_dm31_squared_inverted = %f\n", 
-      default_dm31_squared_inverted); 
-  printf("default_theta12  = %f\n", default_theta12); 
-  printf("default_theta23  = %f\n", default_theta23); 
-  printf("default_theta13  = %f\n", default_theta13); 
-  printf("default_baseline = %f\n", default_baseline); 
-  printf("default_energy   = %f\n", default_energy); 
-
-
+  assert(en > 0);
+  double l_over_e = bl/en;
+  double umu1sqrd = Umu1Sqrd(pp);
+  double umu2sqrd = Umu2Sqrd(pp);
+  double umu3sqrd = Umu3Sqrd(pp);
+  double sdelta21 = sin( Delta21( pp, l_over_e ) );
+  double sdelta31 = sin( Delta31( pp, l_over_e ) );
+  double sdelta32 = sin( Delta32( pp, l_over_e ) );
+  return 1 - 4 * (
+      umu3sqrd*umu1sqrd*sdelta31*sdelta31
+      + umu3sqrd*umu2sqrd*sdelta32*sdelta32
+      + umu2sqrd*umu1sqrd*sdelta21*sdelta21
+      );
 }
-
 
 struct nuOscParams * create_default_nuOscParams()
 {
@@ -71,10 +49,52 @@ struct nuOscParams * create_default_nuOscParams()
 
   params->deltaCP = default_deltaCP;
 
-  params->defaultBaseline = default_baseline; 
-  params->defaultEnergy = default_energy;  
-
   return params;
+}
+
+
+
+void printReferences() 
+{
+  printf("%s\n", theta12Reference);
+  printf("%s\n", theta23Reference);
+  printf("%s\n", theta13Reference);
+  printf("%s\n", deltaM12Reference);
+  printf("%s\n", deltaM23Reference);
+  printf("%s\n", deltaM13Reference);
+  printf("%s\n", globalFitsRef);
+}
+
+void printDefaultParameters()
+{
+  printf("default_helicity              = %d\n", default_helicity); 
+  printf("default_hierarchy             = %d\n", default_hierarchy); 
+  printf("default_deltaCP               = %f\n", default_deltaCP); 
+  printf("default_dm12_squared          = %f\n", 
+      default_dm12_squared); 
+  printf("default_dm21_squared          = %f\n", 
+      default_dm21_squared); 
+  printf("default_dm31_squared_normal   = %f\n", 
+      default_dm31_squared_normal); 
+  printf("default_dm32_squared_normal   = %f\n", 
+      default_dm32_squared_normal); 
+  printf("default_dm13_squared_normal   = %f\n", 
+      default_dm13_squared_normal); 
+  printf("default_dm23_squared_normal   = %f\n", 
+      default_dm23_squared_normal); 
+  printf("default_dm32_squared_inverted = %f\n", 
+      default_dm32_squared_inverted); 
+  printf("default_dm23_squared_inverted = %f\n", 
+      default_dm23_squared_inverted); 
+  printf("default_dm13_squared_inverted = %f\n", 
+      default_dm13_squared_inverted); 
+  printf("default_dm31_squared_inverted = %f\n", 
+      default_dm31_squared_inverted); 
+  printf("default_theta12               = %f\n", default_theta12); 
+  printf("default_theta23               = %f\n", default_theta23); 
+  printf("default_theta13               = %f\n", default_theta13); 
+  printf("default_baseline              = %f\n", default_baseline); 
+  printf("default_energy                = %f\n", default_energy); 
 }
 
 void invert_hierarchy( struct nuOscParams * params )
@@ -205,9 +225,9 @@ double sdlt( const struct nuOscParams * pp ) {
 #define SDLT sdlt(pp)
 double complex Ufm( const struct nuOscParams * pp, int flavor, int mass )
 {
-   /* |   e1   e2   e3 | */
-   /* |  mu1  mu2  mu3 | */
-   /* | tau1 tau2 tau3 | */
+  /* |   e1   e2   e3 | */
+  /* |  mu1  mu2  mu3 | */
+  /* | tau1 tau2 tau3 | */
   double real = 0.;
   double im   = 0.;
   if( 1==flavor && 1==mass ) { // e1
