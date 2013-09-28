@@ -2,5 +2,7 @@
 bin
 lib
 OscCalc/*.o
+OscCalc/.*.swp
 test/*.o
+test/.*.swp
 
