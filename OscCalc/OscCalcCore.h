@@ -20,17 +20,71 @@ struct nuOscParams {
   double deltaCP;
 };
 
-//! Survivial probability for muon-flavor neutrinos in a two-flavor approximation.
+/*! Survivial probability for muon-flavor neutrinos in a two-flavor approximation.
+  */
 double twoFlavorMuSurvive( 
     const struct nuOscParams* pp, 
     double energyInGeV, 
     double baselineInKm ); 
 
-//! Survivial probability for muon-flavor neutrinos in a three-flavor framework.
+/*! Survivial probability for muon-flavor neutrinos in a three-flavor framework.
+  */
 double threeFlavorMuSurvive( 
     const struct nuOscParams* pp, 
     double energyInGeV,
     double baselineInKm ); 
+
+/*! Disappearance probability for muon-flavor neutrinos in a three-flavor framework.
+  */
+double threeFlavorMuDisappear( 
+    const struct nuOscParams* pp, 
+    double energyInGeV,
+    double baselineInKm ); 
+
+/*! Disappearance probability for electron-flavor neutrinos in a three-flavor framework.
+  */
+double threeFlavorEDisappear( 
+    const struct nuOscParams* pp, 
+    double energyInGeV, 
+    double baselineInKm );
+
+/*! The transition probability for three-flavor e-mu-oscialltions in matter.
+  1/4000 is an appropriate matter constant for a baseline measured in km. 
+  */
+double threeFlavorNuMuToNuEMatter( 
+    const struct nuOscParams* pp, 
+    double energyInGeV, 
+    double baselineInKm,
+    double matterConstant );  
+
+/*! The transition probability for three-flavor e-mu-oscialltions in vacuum.
+  The probability is calculated from the interference between the solar and 
+  atmospheric probabilities.
+  */
+double threeFlavorNuMuToNuEVacuum( 
+    const struct nuOscParams* pp, 
+    double energyInGeV, 
+    double baselineInKm );
+
+/*! The "atmospheric" probability for three-flavor e-to-mu oscillations in vacuum.
+  This is not a physically useful probability - the solar probability will always 
+  contribute. This is broken out into a separate function ONLY For the purpose of 
+  demonstrating the effect of the interference.
+  */
+double complex threeFlavorPatmVacuum( 
+    const struct nuOscParams* pp, 
+    double energyInGeV, 
+    double baselineInKm );
+
+/*! The "solar" probability for three-flavor e-to-mu oscillations in vacuum.
+  This is not a physically useful probability - the atmospheric probability will always 
+  contribute. This is broken out into a separate function ONLY For the purpose of 
+  demonstrating the effect of the interference.
+  */
+double complex threeFlavorPsolVacuum( 
+    const struct nuOscParams* pp, 
+    double energyInGeV, 
+    double baselineInKm );
 
 const double L_OVER_E_CONVERTER = 1.2669;
 

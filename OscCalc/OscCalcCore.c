@@ -13,6 +13,11 @@ double twoFlavorMuSurvive( const struct nuOscParams* pp, double en, double bl )
 
 double threeFlavorMuSurvive( const struct nuOscParams* pp, double en, double bl )
 {
+  return 1 - threeFlavorMuDisappear(pp,en,bl);
+}
+
+double threeFlavorMuDisappear( const struct nuOscParams* pp, double en, double bl )
+{
   assert(en > 0);
   double l_over_e = bl/en;
   double umu1sqrd = Umu1Sqrd(pp);
@@ -21,12 +26,87 @@ double threeFlavorMuSurvive( const struct nuOscParams* pp, double en, double bl 
   double sdelta21 = sin( Delta21( pp, l_over_e ) );
   double sdelta31 = sin( Delta31( pp, l_over_e ) );
   double sdelta32 = sin( Delta32( pp, l_over_e ) );
-  return 1 - 4 * (
+  return 4 * (
       umu3sqrd*umu1sqrd*sdelta31*sdelta31
       + umu3sqrd*umu2sqrd*sdelta32*sdelta32
       + umu2sqrd*umu1sqrd*sdelta21*sdelta21
       );
+} 
+
+double threeFlavorEDisappear( const struct nuOscParams* pp, double en, double bl ) 
+{
+  assert(en > 0);
+  double l_over_e = bl/en;
+  double ue1sqrd = Ue1Sqrd(pp);
+  double ue2sqrd = Ue2Sqrd(pp);
+  double ue3sqrd = Ue3Sqrd(pp);
+  double sdelta21 = sin( Delta21( pp, l_over_e ) );
+  double sdelta31 = sin( Delta31( pp, l_over_e ) );
+  double sdelta32 = sin( Delta32( pp, l_over_e ) );
+  return 1 - 4 * (
+      ue3sqrd*ue1sqrd*sdelta31*sdelta31
+      + ue3sqrd*ue2sqrd*sdelta32*sdelta32
+      + ue2sqrd*ue1sqrd*sdelta21*sdelta21
+      );
 }
+
+double threeFlavorNuMuToNuEMatter( const struct nuOscParams* pp, 
+    double en, double bl, double mc ) 
+{
+  assert(en > 0);
+  double         l_over_e   = bl/en;
+  double         aL         = pp->helicity * bl * mc; 
+  assert(aL != 0.);
+  double complex umu3dagger = conj( Ufm(pp,2,3) );
+  double complex ue3        = Ufm(pp,1,3);
+  double         d32        = Delta32( pp, l_over_e );
+  double         d31        = Delta31( pp, l_over_e );
+  assert(d31 != aL);
+  double complex s1         = 2 * sin( d31 - aL )/( d31 - aL )*d31 + 0.*I;
+  double complex t1         = cos( d32 ) - sin( d32 )*I;
+
+  double complex umu2dagger = conj( Ufm(pp,2,2) );
+  double complex ue2        = Ufm(pp,1,2);
+  double         d21        = Delta21( pp, l_over_e );
+  double complex s2         = 2 * sin( aL ) * d21/aL + 0.*I;
+
+  double complex sum = umu3dagger*ue3*s1*t1 + umu2dagger*ue2*s2;
+  double         val = sum*conj(sum);
+  return val;
+}
+
+double threeFlavorNuMuToNuEVacuum( const struct nuOscParams* pp, double en, double bl ) 
+{
+  assert(en > 0);
+  double         l_over_e = bl/en;
+  double         d32      = Delta32( pp, l_over_e );
+  double complex t1       = cos( d32 ) - sin( d32 )*I;
+  double complex sum      = threeFlavorPatmVacuum(pp,en,bl)*t1 + 
+    threeFlavorPsolVacuum(pp,en,bl);
+  double         val      = sum*conj(sum);
+  return val;
+}
+
+double complex threeFlavorPatmVacuum( const struct nuOscParams* pp, double en, double bl ) 
+{
+  assert(en > 0);
+  double         l_over_e   = bl/en;
+  double complex umu3dagger = conj( Ufm(pp,2,3) );
+  double complex ue3        = Ufm(pp,1,3);
+  double complex s1         = 2 * sin( Delta31(pp,l_over_e) ) + 0.*I;
+  return umu3dagger*ue3*s1;
+}
+
+double complex threeFlavorPsolVacuum( const struct nuOscParams* pp, double en, double bl ) 
+{
+  assert(en > 0);
+  double         l_over_e   = bl/en;
+  double complex umu2dagger = conj( Ufm(pp,2,2) );
+  double complex ue2        = Ufm(pp,1,2);
+  double complex s2         = 2 * sin( Delta21(pp,l_over_e) ) + 0.*I;
+  return umu2dagger*ue2*s2;
+}
+
 
 struct nuOscParams * create_default_nuOscParams()
 {
@@ -35,24 +115,17 @@ struct nuOscParams * create_default_nuOscParams()
   params->delta_m12_squared = default_dm12_squared;
   params->delta_m23_squared = default_dm23_squared_normal;
   params->delta_m13_squared = default_dm13_squared_normal;
-
   params->delta_m21_squared = default_dm12_squared;
   params->delta_m32_squared = default_dm32_squared_normal;
   params->delta_m31_squared = default_dm31_squared_normal;
-
-  params->theta12 = default_theta12;
-  params->theta23 = default_theta23;
-  params->theta13 = default_theta13;
-
-  params->hierarchy = default_hierarchy;  
-  params->helicity = default_helicity;   
-
-  params->deltaCP = default_deltaCP;
-
+  params->theta12           = default_theta12;
+  params->theta23           = default_theta23;
+  params->theta13           = default_theta13;
+  params->hierarchy         = default_hierarchy;  
+  params->helicity          = default_helicity;   
+  params->deltaCP           = default_deltaCP;
   return params;
 }
-
-
 
 void printReferences() 
 {
@@ -131,31 +204,6 @@ double CosSqrdTheta23( const struct nuOscParams * pp )  {
   double Theta23 = pp->theta23;
   return cos( Theta23 ) * cos( Theta23 ); 
 }
-
-/* L in km, E in GeV */
-/* double Delta12( const struct nuOscParams * pp, double L, double E ) { */ 
-/*   return L_OVER_E_CONVERTER * pp->delta_m12_squared * (L / E); */ 
-/* } */
-
-/* double Delta13( const struct nuOscParams * pp, double L, double E ) { */ 
-/*   return L_OVER_E_CONVERTER * pp->delta_m13_squared * (L / E); */ 
-/* } */
-
-/* double Delta23( const struct nuOscParams * pp, double L, double E ) { */ 
-/*   return L_OVER_E_CONVERTER * pp->delta_m23_squared * (L / E); */ 
-/* } */
-
-/* double Delta21( const struct nuOscParams * pp, double L, double E ) { */ 
-/*   return L_OVER_E_CONVERTER * pp->delta_m21_squared * (L / E); */ 
-/* } */
-
-/* double Delta31( const struct nuOscParams * pp, double L, double E ) { */ 
-/*   return L_OVER_E_CONVERTER * pp->delta_m31_squared * (L / E); */ 
-/* } */
-
-/* double Delta32( const struct nuOscParams * pp, double L, double E ) { */ 
-/*   return L_OVER_E_CONVERTER * pp->delta_m32_squared * (L / E); */ 
-/* } */
 
 /* L in km, E in GeV */
 double Delta12( const struct nuOscParams * pp, double LovrE ) { 
@@ -264,7 +312,6 @@ double complex Ufm( const struct nuOscParams * pp, int flavor, int mass )
   }
   double complex retval = real +  im*I;
   return retval;
-
 }
 
 double Ue1Sqrd( const struct nuOscParams * pp )   { 
