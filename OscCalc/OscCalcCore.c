@@ -166,8 +166,6 @@ void printDefaultParameters()
   printf("default_theta12               = %f\n", default_theta12); 
   printf("default_theta23               = %f\n", default_theta23); 
   printf("default_theta13               = %f\n", default_theta13); 
-  printf("default_baseline              = %f\n", default_baseline); 
-  printf("default_energy                = %f\n", default_energy); 
 }
 
 void invert_hierarchy( struct nuOscParams * params )

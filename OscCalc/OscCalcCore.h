@@ -20,6 +20,8 @@ struct nuOscParams {
   double deltaCP;
 };
 
+struct nuOscParams * create_default_nuOscParams();
+
 /*! Survivial probability for muon-flavor neutrinos in a two-flavor approximation.
   */
 double twoFlavorMuSurvive( 
@@ -137,17 +139,13 @@ const double default_theta12  = THETA12DEG * DEGTORAD;
 const double default_theta23  = THETA23DEG * DEGTORAD;
 const double default_theta13  = THETA13DEG * DEGTORAD;
 
-#define FNALTOSOUDAN 735.0 /* km */
-const double default_baseline = FNALTOSOUDAN; /* km */
-
-/* Default Experimental Parameters */
-const double default_energy   = 2.0;   /* GeV */
-
+#define TOKAI_TO_KAMIOKA   270.0 /* km */ /* probably wrong... */
+#define FNAL_TO_SOUDAN     735.0 /* km */
+#define FNAL_TO_ASHRIVER   810.0 /* km */ /* probably wrong... */
+#define FNAL_TO_HOMESTAKE 1350.0 /* km */ /* probably wrong... */
 
 void printReferences();
 void printDefaultParameters();
-
-struct nuOscParams * create_default_nuOscParams();
 
 void invert_hierarchy( struct nuOscParams * params );
 
@@ -156,14 +154,6 @@ double SinSqrd2Theta13( const struct nuOscParams * pp );
 double SinSqrd2Theta23( const struct nuOscParams * pp );
 double SinSqrdTheta23( const struct nuOscParams * pp );
 double CosSqrdTheta23( const struct nuOscParams * pp );
-
-/* L in km, E in GeV */
-/* double Delta12( const struct nuOscParams * pp, double L, double E ); */
-/* double Delta13( const struct nuOscParams * pp, double L, double E ); */
-/* double Delta23( const struct nuOscParams * pp, double L, double E ); */
-/* double Delta21( const struct nuOscParams * pp, double L, double E ); */
-/* double Delta31( const struct nuOscParams * pp, double L, double E ); */
-/* double Delta32( const struct nuOscParams * pp, double L, double E ); */
 
 /* L in km, E in GeV, LovrE = L/E */
 double Delta12( const struct nuOscParams * pp, double LovrE );
