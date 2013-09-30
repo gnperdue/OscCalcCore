@@ -14,7 +14,7 @@ On Linux, it will update your LD_LIBRARY_PATH.
 
 To-do:
 
-* Add an API for R code to call functions.
+* Expand the API for R code to call functions.
 
 * Add an R script demoing some of the code.
 
