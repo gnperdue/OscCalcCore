@@ -9,3 +9,6 @@ clean:
 	make clean -C OscCalc -f Makefile.$(ARCH)
 	make clean -C test -f Makefile.$(ARCH)
 
+remake:
+	make clean
+	make all

@@ -1,8 +1,12 @@
+#ifndef OscCalcCore_c
+#define OscCalcCore_c
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
 #include "OscCalcCore.h"
+#include "OscCalcDefs.h"
 
 double twoFlavorMuSurvive( const struct nuOscParams* pp, double en, double bl )
 {
@@ -348,4 +352,4 @@ double Utau3Sqrd( const struct nuOscParams * pp ) {
   return abs( Ufm(pp,3,3)*conj(Ufm(pp,3,3)) ); 
 }
 
-
+#endif
