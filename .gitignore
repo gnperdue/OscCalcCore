@@ -6,3 +6,6 @@ OscCalc/.*.swp
 test/*.o
 test/.*.swp
 
+.RData
+.Rhistory
+

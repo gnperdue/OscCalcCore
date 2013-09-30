@@ -1,7 +1,7 @@
 > dyn.load("../lib/libOscCalc.dylib")
 > energies <- seq(from=0.1, to=10, by=0.1)
 > probabilities <- rep(0,100)
-> .C("twoFlavorMuSurviveArray_R",baseline=as.double(735),nenergies=as.integer(100),energies=energies,probabilities=probabilities)
+> oscprob <- .C("twoFlavorMuSurviveArray_R",baseline=as.double(735),nenergies=as.integer(100),energies=energies,probabilities=probabilities)
 $baseline
 [1] 735
 
@@ -36,4 +36,4 @@ $probabilities
  [91] 0.94290761 0.94411772 0.94529002 0.94642606 0.94752731 0.94859516
  [97] 0.94963094 0.95063591 0.95161129 0.95255820
 
-
+> plot(oscprob$energies,oscprob$probabilities)
