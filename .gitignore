@@ -9,3 +9,5 @@ test/.*.swp
 .RData
 .Rhistory
 
+R/*.pdf
+

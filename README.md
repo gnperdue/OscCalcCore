@@ -14,7 +14,9 @@ On Linux, it will update your LD_LIBRARY_PATH.
 
 To-do:
 
+* Vet the calculation carefully - things look a little buggy at low energy for electron neutrino appearance.
+
 * Expand the API for R code to call functions.
 
-* Add an R script demoing some of the code.
+* Expand the R scripts demoing some of the code so making some more common plots is easier.
 

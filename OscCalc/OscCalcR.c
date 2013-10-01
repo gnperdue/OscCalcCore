@@ -18,7 +18,7 @@ void twoFlavorMuSurviveArray_R(
   free(params);
 }
 
-void threeFlavorMuSurvive_R( 
+void threeFlavorMuSurviveArray_R( 
     double *baseline,
     double *deltaCP,
     double *theta23,
@@ -35,5 +35,23 @@ void threeFlavorMuSurvive_R(
   free(params);
 }
 
+void threeFlavorNuMuToNuEMatterArray_R( 
+    double *baseline,
+    double *deltaCP,
+    double *matterConst,
+    int    *hierarchy,
+    int    *nenergies,
+    double energies[],
+    double probabilities[])
+{
+  struct nuOscParams *params = create_default_nuOscParams();
+  params->deltaCP = *deltaCP;
+  if (*hierarchy < 0) invert_hierarchy( params );
+  for (int i = 0; i<(*nenergies); ++i) {
+    probabilities[i] = threeFlavorNuMuToNuEMatter( 
+        params, energies[i], *baseline, *matterConst );
+  }
+  free(params);
+}
 
 #endif
