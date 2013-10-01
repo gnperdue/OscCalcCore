@@ -10,4 +10,5 @@ test/.*.swp
 .Rhistory
 
 R/*.pdf
+R/.*.swp
 
