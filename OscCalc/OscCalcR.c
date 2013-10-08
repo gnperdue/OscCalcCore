@@ -40,12 +40,14 @@ void threeFlavorNuMuToNuEMatterArray_R(
     double *deltaCP,
     double *matterConst,
     int    *hierarchy,
+    int    *helicity,
     int    *nenergies,
     double energies[],
     double probabilities[])
 {
   struct nuOscParams *params = create_default_nuOscParams();
   params->deltaCP = *deltaCP;
+  params->helicity = *helicity;
   if (*hierarchy < 0) invert_hierarchy( params );
   for (int i = 0; i<(*nenergies); ++i) {
     probabilities[i] = threeFlavorNuMuToNuEMatter( 

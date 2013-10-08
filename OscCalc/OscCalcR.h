@@ -36,6 +36,7 @@ void threeFlavorMuSurviveArray_R(
   \param deltaCP       Input
   \param matterConst   Input : 1/4000 is an appropriate matter constant for a baseline measured in km. 
   \param hierarchy     Input : Positive value for normal, negative value for inverted.
+  \param helicity      Input : Positive value for neutrinos, negative value for antineutrinos.
   \param nenergies     Input : The length of the energies array and the probabilities array.
   \param energies      Input : Array of energies.
   \param probabilities Output: Array of calculated probabilies.
@@ -46,6 +47,7 @@ void threeFlavorNuMuToNuEMatterArray_R(
     double *deltaCP,
     double *matterConst,
     int    *hierarchy,
+    int    *helicity,
     int    *nenergies,
     double energies[],
     double probabilities[]);
