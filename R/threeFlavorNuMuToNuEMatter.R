@@ -11,30 +11,60 @@ deltas <- seq(from=0.0, to=2*pi, by=pi/4);
 
 for (deltacp in deltas) {
 
+  helic   <- 1;
+
   hierarc <- 1;
-  oscpnrm <- .C("threeFlavorNuMuToNuEMatterArray_R",
+  nu_oscp_nrm <- .C("threeFlavorNuMuToNuEMatterArray_R",
       baseline=as.double(baseln),
       deltaCP=as.double(deltacp),
       matterConst=as.double(matterc),
       hierarchy=as.integer(hierarc),
+      helicity=as.integer(helic),
       nenergies=as.integer(nen),
       energies=enrgs,probabilities=probs);
 
   hierarc <- -1;
-  oscpinv <- .C("threeFlavorNuMuToNuEMatterArray_R",
+  nu_oscp_inv <- .C("threeFlavorNuMuToNuEMatterArray_R",
       baseline=as.double(baseln),
       deltaCP=as.double(deltacp),
       matterConst=as.double(matterc),
       hierarchy=as.integer(hierarc),
+      helicity=as.integer(helic),
+      nenergies=as.integer(nen),
+      energies=enrgs,probabilities=probs);
+
+  helic   <- -1;
+
+  hierarc <- 1;
+  antinu_oscp_nrm <- .C("threeFlavorNuMuToNuEMatterArray_R",
+      baseline=as.double(baseln),
+      deltaCP=as.double(deltacp),
+      matterConst=as.double(matterc),
+      hierarchy=as.integer(hierarc),
+      helicity=as.integer(helic),
+      nenergies=as.integer(nen),
+      energies=enrgs,probabilities=probs);
+
+  hierarc <- -1;
+  antinu_oscp_inv <- .C("threeFlavorNuMuToNuEMatterArray_R",
+      baseline=as.double(baseln),
+      deltaCP=as.double(deltacp),
+      matterConst=as.double(matterc),
+      hierarchy=as.integer(hierarc),
+      helicity=as.integer(helic),
       nenergies=as.integer(nen),
       energies=enrgs,probabilities=probs);
 
   pdftitle <- sprintf("threeFlavorNuMuToNuEMatter_base%.1f_dcp%.3f.pdf", baseln, deltacp);
   dcplabel <- sprintf("Delta-CP = %.3f", deltacp);
-  leglabels <- c("Normal Hierarchy","Inverted Hierarchy");
+  leglabels <- c(
+      "Normal Neutrinos",
+      "Normal Antineutrinos",
+      "Inverted Neutrinos",
+      "Inverted Antineutrinos");
 
   pdf( pdftitle );
-  plot(oscpnrm$energies,oscpnrm$probabilities,
+  plot(nu_oscp_nrm$energies,nu_oscp_nrm$probabilities,
       main="Three-Flavor Muon-to-Electron Transition",
       xlab="Neutrino Energy (GeV)",
       ylab="Electrono Appearance Probability",
@@ -42,11 +72,19 @@ for (deltacp in deltas) {
       ylim=c(0.0,0.08),
       col="red",
       type="l");
-  lines(oscpinv$energies,oscpinv$probabilities,
+  lines(antinu_oscp_nrm$energies,antinu_oscp_nrm$probabilities,
+      col="red",
+      lty=2,
+      type="l");
+  lines(nu_oscp_inv$energies,nu_oscp_inv$probabilities,
       col="blue",
       type="l");
+  lines(antinu_oscp_inv$energies,antinu_oscp_inv$probabilities,
+      col="blue",
+      lty=2,
+      type="l");
 # Sadly, you just have to tune this carefully...
-  legend(x=5, y=0.06, legend=leglabels, fill=c("red","blue"));
+  legend(x=5, y=0.06, legend=leglabels, fill=c("red","red","blue","blue"), lty=c(1,2,1,2));
   text(x=6, y=0.04, labels=dcplabel);
   dev.off();
 
