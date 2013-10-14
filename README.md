@@ -2,8 +2,9 @@ This is a C library that aims to provide useful functions for
 calculating neutrino oscialltion probabilities in two and three-
 flavor frameworks. 
 
-It is under construction and not fully functional (you can call the C code
-directly, which may be enough for you, but more is coming).
+It is under construction and not fully functional - there is code
+that works in the sense that it returns values, but the values are 
+not the correct physics right now.
 
 To build:
 
