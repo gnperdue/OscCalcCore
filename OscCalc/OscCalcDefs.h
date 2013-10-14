@@ -26,26 +26,25 @@ const double default_deltaCP    = 0.0;
 
 /* 1-2 Splitting */
 #define DEFDM12 -7.50e-5
-const double default_dm12_squared          =      DEFDM12;
+const double default_dm12_squared          = DEFDM12;
 const double default_dm21_squared          = -1.0*DEFDM12;
 
 /* Normal Hierarchy Mass Splittings */
-#define DEFDM31 2.47e-3
-const double default_dm31_squared_normal   =      DEFDM31;
-const double default_dm32_squared_normal   =      DEFDM31 + DEFDM12;
-const double default_dm13_squared_normal   = -1.0*DEFDM31;
-const double default_dm23_squared_normal   = -1.0*(DEFDM31 + DEFDM12);
+#define DEFDM32 2.43e-3
+const double default_dm31_squared_normal   = DEFDM32 - DEFDM12; 
+const double default_dm32_squared_normal   = DEFDM32;
+const double default_dm13_squared_normal   = -1.0*(DEFDM32 - DEFDM12);
+const double default_dm23_squared_normal   = -1.0*DEFDM32;
 
 /* Inverted Hierarchy Splittings */
-#define DEFDM32 -2.43e-3
-const double default_dm32_squared_inverted =        DEFDM32;
-const double default_dm23_squared_inverted =   -1.0*DEFDM32;
-const double default_dm13_squared_inverted =   -1.0*DEFDM32 + DEFDM12;
-const double default_dm31_squared_inverted = -1.0*(-1.0*DEFDM32 + DEFDM12);
+const double default_dm32_squared_inverted = -1.0*DEFDM32;
+const double default_dm23_squared_inverted = DEFDM32;
+const double default_dm13_squared_inverted = DEFDM32 + DEFDM12;
+const double default_dm31_squared_inverted = -1.0*(DEFDM32 + DEFDM12);
 
 /* Mixing Angles */
 #define THETA12DEG 33.3
-#define THETA23DEG 40.0
+#define THETA23DEG 45.0
 #define THETA13DEG 8.6
 #define DEGTORAD 3.14159 / 180;
 const double default_theta12  = THETA12DEG * DEGTORAD;

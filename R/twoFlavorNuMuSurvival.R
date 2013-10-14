@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 dyn.load("../lib/libOscCalc.dylib");
-enrgs   <- seq(from=0.025, to=8, by=0.025);
+enrgs   <- seq(from=0.5, to=4.5, by=0.01);
 nen     <- length(enrgs);
 probs   <- rep(0,nen);
 baseln  <- 735.0;

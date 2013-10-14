@@ -1,11 +1,12 @@
 #!/usr/bin/env Rscript
 
 dyn.load("../lib/libOscCalc.dylib");
-enrgs   <- seq(from=0.5, to=8, by=0.025);
+enrgs   <- seq(from=0.2, to=10, by=0.01);
 nen     <- length(enrgs);
 probs   <- rep(0,nen);
-baseln  <- 735.0;
+baseln  <- 810.0;
 matterc <- 1/4000.;
+#matterc <- 1/1;
 
 deltas <- seq(from=0.0, to=2*pi, by=pi/4);
 
@@ -68,10 +69,12 @@ for (deltacp in deltas) {
       main="Three-Flavor Muon-to-Electron Transition",
       xlab="Neutrino Energy (GeV)",
       ylab="Electrono Appearance Probability",
-      xlim=c(0.5,8),
+      xlim=c(0.2,10),
       ylim=c(0.0,0.08),
       col="red",
-      type="l");
+      type="l",
+      log="x"
+      );
   lines(antinu_oscp_nrm$energies,antinu_oscp_nrm$probabilities,
       col="red",
       lty=2,

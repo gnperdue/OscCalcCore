@@ -59,7 +59,7 @@ double threeFlavorNuMuToNuEMatter( const struct nuOscParams* pp,
 {
   assert(en > 0);
   double         l_over_e   = bl/en;
-  double         aL         = pp->helicity * bl * mc; 
+  double         aL         = pp->helicity > 0 ? bl * mc : -1.0 * bl * mc; 
   assert(aL != 0.);
   double complex umu3dagger = conj( Ufm(pp,2,3) );
   double complex ue3        = Ufm(pp,1,3);
@@ -176,10 +176,18 @@ void invert_hierarchy( struct nuOscParams * params )
 {
   assert(0 != params->hierarchy);
   params->hierarchy = -params->hierarchy;
-  params->delta_m23_squared = -params->delta_m23_squared;
-  params->delta_m13_squared = -params->delta_m13_squared;
-  params->delta_m32_squared = -params->delta_m32_squared;
-  params->delta_m31_squared = -params->delta_m31_squared;
+  if (params->hierarchy > 0) {
+    params->delta_m23_squared = default_dm23_squared_normal;
+    params->delta_m13_squared = default_dm13_squared_normal;
+    params->delta_m32_squared = default_dm32_squared_normal;
+    params->delta_m31_squared = default_dm31_squared_normal;
+  } 
+  else {
+    params->delta_m23_squared = default_dm23_squared_inverted;
+    params->delta_m13_squared = default_dm13_squared_inverted;
+    params->delta_m32_squared = default_dm32_squared_inverted;
+    params->delta_m31_squared = default_dm31_squared_inverted;
+  }
 }
 
 double SinSqrd2Theta12( const struct nuOscParams * pp ) { 
@@ -258,11 +266,13 @@ double  c23( const struct nuOscParams * pp ) {
 }
 
 double cdlt( const struct nuOscParams * pp ) { 
-  return cos( pp->deltaCP ); 
+  double dlt = pp->helicity > 0.0 ? pp->deltaCP : -1.0 * pp->deltaCP;
+  return cos( dlt ); 
 }
 
 double sdlt( const struct nuOscParams * pp ) { 
-  return sin( pp->deltaCP ); 
+  double dlt = pp->helicity > 0.0 ? pp->deltaCP : -1.0 * pp->deltaCP;
+  return sin( dlt ); 
 }
 
 #define S12 s12(pp)
