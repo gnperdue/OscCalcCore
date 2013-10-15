@@ -56,4 +56,47 @@ void threeFlavorNuMuToNuEMatterArray_R(
   free(params);
 }
 
+void threeFlavorPatmVacuumArray_R( 
+    double *baseline,
+    double *deltaCP,
+    int    *hierarchy,
+    int    *helicity,
+    int    *nenergies,
+    double energies[],
+    double probabilities[])
+{
+  struct nuOscParams *params = create_default_nuOscParams();
+  params->deltaCP = *deltaCP;
+  params->helicity = *helicity;
+  if (*hierarchy < 0) invert_hierarchy( params );
+  for (int i = 0; i<(*nenergies); ++i) {
+    double complex prob = threeFlavorPatmVacuum( 
+        params, energies[i], *baseline );
+    probabilities[i] = prob * conj(prob);
+  }
+  free(params);
+}
+
+void threeFlavorPsolVacuumArray_R( 
+    double *baseline,
+    double *deltaCP,
+    int    *hierarchy,
+    int    *helicity,
+    int    *nenergies,
+    double energies[],
+    double probabilities[])
+{
+  struct nuOscParams *params = create_default_nuOscParams();
+  params->deltaCP = *deltaCP;
+  params->helicity = *helicity;
+  if (*hierarchy < 0) invert_hierarchy( params );
+  for (int i = 0; i<(*nenergies); ++i) {
+    double complex prob = threeFlavorPsolVacuum( 
+        params, energies[i], *baseline );
+    probabilities[i] = prob * conj(prob);
+  }
+  free(params);
+}
+
+
 #endif
