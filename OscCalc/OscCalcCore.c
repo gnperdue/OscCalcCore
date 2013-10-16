@@ -61,21 +61,15 @@ double threeFlavorNuMuToNuEMatter( const struct nuOscParams* pp,
   double         l_over_e   = bl/en;
   double         aL         = pp->helicity > 0 ? bl * mc : -1.0 * bl * mc; 
   assert(aL != 0.);
-  double complex umu3dagger = conj( Ufm(pp,2,3) );
-  double complex ue3        = Ufm(pp,1,3);
-  double         d32        = Delta32( pp, l_over_e );
   double         d31        = Delta31( pp, l_over_e );
-  assert(d31 != aL);
-  double complex s1         = 2 * sin( d31 - aL )/( d31 - aL )*d31 + 0.*I;
-  double complex t1         = cos( d32 ) - sin( d32 )*I;
-
-  double complex umu2dagger = conj( Ufm(pp,2,2) );
-  double complex ue2        = Ufm(pp,1,2);
+  double         d32        = Delta32( pp, l_over_e );
   double         d21        = Delta21( pp, l_over_e );
-  double complex s2         = 2 * sin( aL ) * d21/aL + 0.*I;
-
-  double complex sum = umu3dagger*ue3*s1*t1 + umu2dagger*ue2*s2;
-  double         val = sum*conj(sum);
+  double         dlt        = pp->helicity > 0 ? pp->deltaCP : -1.0 * pp->deltaCP;
+  double complex sqrt_p_atm = sin(pp->theta13) * sin(2*pp->theta23) * sin( d31 - aL )/( d31 - aL ) * d31 + 0.*I;
+  double complex sqrt_p_sol = cos(pp->theta23) * sin(2*pp->theta12) * sin( aL )/( aL ) * d21 + 0.*I;
+  double complex t1         = cos( d32 + dlt ) - sin( d32 + dlt )*I;
+  double complex sum        = sqrt_p_atm * t1 + sqrt_p_sol;
+  double         val        = sum*conj(sum);
   return val;
 }
 
@@ -119,7 +113,7 @@ struct nuOscParams * create_default_nuOscParams()
   params->delta_m12_squared = default_dm12_squared;
   params->delta_m23_squared = default_dm23_squared_normal;
   params->delta_m13_squared = default_dm13_squared_normal;
-  params->delta_m21_squared = default_dm12_squared;
+  params->delta_m21_squared = default_dm21_squared;
   params->delta_m32_squared = default_dm32_squared_normal;
   params->delta_m31_squared = default_dm31_squared_normal;
   params->theta12           = default_theta12;
@@ -129,6 +123,24 @@ struct nuOscParams * create_default_nuOscParams()
   params->helicity          = default_helicity;   
   params->deltaCP           = default_deltaCP;
   return params;
+}
+
+void printNuOscParams( const struct nuOscParams* params )
+{
+  printf("Nu Osc Params:\n");
+  printf(" Delta M12^2 = %f\n", params->delta_m12_squared);
+  printf(" Delta M23^2 = %f\n", params->delta_m23_squared);
+  printf(" Delta M13^2 = %f\n", params->delta_m13_squared);
+  printf(" Delta M21^2 = %f\n", params->delta_m21_squared);
+  printf(" Delta M32^2 = %f\n", params->delta_m32_squared);
+  printf(" Delta M31^2 = %f\n", params->delta_m31_squared);
+  printf(" Theta 12    = %f\n", params->theta12);
+  printf(" Theta 23    = %f\n", params->theta23);
+  printf(" Theta 13    = %f\n", params->theta13);
+  printf(" Hierarchy   = %d\n", params->hierarchy);
+  printf(" Helicity    = %d\n", params->helicity);
+  printf(" Delta CP    = %f\n", params->deltaCP);
+  printf("\n");
 }
 
 void printReferences() 
@@ -327,39 +339,39 @@ double complex Ufm( const struct nuOscParams * pp, int flavor, int mass )
 }
 
 double Ue1Sqrd( const struct nuOscParams * pp )   { 
-  return abs( Ufm(pp,1,1)*conj(Ufm(pp,1,1)) ); 
+  return fabs( Ufm(pp,1,1)*conj(Ufm(pp,1,1)) ); 
 }
 
 double Ue2Sqrd( const struct nuOscParams * pp )   { 
-  return abs( Ufm(pp,1,2)*conj(Ufm(pp,1,2)) ); 
+  return fabs( Ufm(pp,1,2)*conj(Ufm(pp,1,2)) ); 
 }
 
 double Ue3Sqrd( const struct nuOscParams * pp )   { 
-  return abs( Ufm(pp,1,3)*conj(Ufm(pp,1,3)) ); 
+  return fabs( Ufm(pp,1,3)*conj(Ufm(pp,1,3)) ); 
 }
 
 double Umu1Sqrd( const struct nuOscParams * pp )  { 
-  return abs( Ufm(pp,2,1)*conj(Ufm(pp,2,1)) ); 
+  return fabs( Ufm(pp,2,1)*conj(Ufm(pp,2,1)) ); 
 }
 
 double Umu2Sqrd( const struct nuOscParams * pp )  { 
-  return abs( Ufm(pp,2,2)*conj(Ufm(pp,2,2)) ); 
+  return fabs( Ufm(pp,2,2)*conj(Ufm(pp,2,2)) ); 
 }
 
 double Umu3Sqrd( const struct nuOscParams * pp )  { 
-  return abs( Ufm(pp,2,3)*conj(Ufm(pp,2,3)) ); 
+  return fabs( Ufm(pp,2,3)*conj(Ufm(pp,2,3)) ); 
 }
 
 double Utau1Sqrd( const struct nuOscParams * pp ) { 
-  return abs( Ufm(pp,3,1)*conj(Ufm(pp,3,1)) ); 
+  return fabs( Ufm(pp,3,1)*conj(Ufm(pp,3,1)) ); 
 }
 
 double Utau2Sqrd( const struct nuOscParams * pp ) { 
-  return abs( Ufm(pp,3,2)*conj(Ufm(pp,3,2)) ); 
+  return fabs( Ufm(pp,3,2)*conj(Ufm(pp,3,2)) ); 
 }
 
 double Utau3Sqrd( const struct nuOscParams * pp ) { 
-  return abs( Ufm(pp,3,3)*conj(Ufm(pp,3,3)) ); 
+  return fabs( Ufm(pp,3,3)*conj(Ufm(pp,3,3)) ); 
 }
 
 #endif

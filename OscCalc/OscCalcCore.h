@@ -25,6 +25,10 @@ struct nuOscParams {
 
 struct nuOscParams * create_default_nuOscParams();
 
+/*! Print the current parameter set to std out.
+  */
+void printNuOscParams( const struct nuOscParams* pp );
+
 /*! Survivial probability for muon-flavor neutrinos in a two-flavor approximation.
   */
 double twoFlavorMuSurvive( 
