@@ -4,7 +4,7 @@ dyn.load("../lib/libOscCalc.dylib");
 enrgs   <- seq(from=0.2, to=10, by=0.01);
 nen     <- length(enrgs);
 probs   <- rep(0,nen);
-baseln  <- 810.0;
+baseln  <- 1250.0;
 matterc <- 1/4000.;
 
 deltas <- seq(from=0.0, to=2*pi, by=pi/4);
@@ -51,7 +51,7 @@ for (deltacp in deltas) {
       nenergies=as.integer(nen),
       energies=enrgs,probabilities=probs);
 
-  pdftitle <- sprintf("threeFlavorNuMuToNuEMatter_base%.1f_dcp%.3f.pdf", baseln, deltacp);
+  pdftitle <- sprintf("threeFlavorNuMuToNuEMatter_PvsE_base%.1f_dcp%.3f.pdf", baseln, deltacp);
   dcplabel <- sprintf("Delta-CP = %.3f", deltacp);
   bllabel  <- sprintf("Baseline = %.3f km", baseln);
   leglabels <- c(
@@ -82,10 +82,37 @@ for (deltacp in deltas) {
       col="blue",
       lty=2,
       type="l");
-# Sadly, you just have to tune this carefully...
   legend(x=1.5, y=0.08, legend=leglabels, fill=c("red","red","blue","blue"), lty=c(1,2,1,2));
   text(x=3, y=0.06, labels=dcplabel);
   text(x=3, y=0.055, labels=bllabel);
+  dev.off();
+
+  pdftitle <- sprintf("threeFlavorNuMuToNuEMatter_PvsLovrE_base%.1f_dcp%.3f.pdf", baseln, deltacp);
+  pdf( pdftitle );
+  bllabel  <- sprintf("Matter Effect at = %.3f km", baseln);
+  plot(baseln/nu_oscp_nrm$energies,nu_oscp_nrm$probabilities,
+      main="Three-Flavor Muon-to-Electron Transition",
+      xlab="Baseline/Neutrino Energy (km/GeV)",
+      ylab="Electrono Appearance Probability",
+      xlim=c(1,5000),
+      ylim=c(0.0,0.2),
+      col="red",
+      type="l",
+      );
+  lines(baseln/antinu_oscp_nrm$energies,antinu_oscp_nrm$probabilities,
+      col="red",
+      lty=2,
+      type="l");
+  lines(baseln/nu_oscp_inv$energies,nu_oscp_inv$probabilities,
+      col="blue",
+      type="l");
+  lines(baseln/antinu_oscp_inv$energies,antinu_oscp_inv$probabilities,
+      col="blue",
+      lty=2,
+      type="l");
+  legend(x=500, y=0.18, legend=leglabels, fill=c("red","red","blue","blue"), lty=c(1,2,1,2));
+  text(x=1500, y=0.13, labels=dcplabel);
+  text(x=1500, y=0.12, labels=bllabel);
   dev.off();
 
 }
