@@ -51,6 +51,24 @@ void threeFlavorNuMuToNuEMatterArray_R(
     double energies[],
     double probabilities[]);
 
+/*! R-API: The transition probability for three-flavor e-mu-oscialltions in vacuum.
+  \param baseline      Input
+  \param deltaCP       Input
+  \param hierarchy     Input : Positive value for normal, negative value for inverted.
+  \param helicity      Input : Positive value for neutrinos, negative value for antineutrinos.
+  \param nenergies     Input : The length of the energies array and the probabilities array.
+  \param energies      Input : Array of energies.
+  \param probabilities Output: Array of calculated probabilies.
+  */
+void threeFlavorNuMuToNuEVacuumArray_R( 
+    double *baseline,
+    double *deltaCP,
+    int    *hierarchy,
+    int    *helicity,
+    int    *nenergies,
+    double energies[],
+    double probabilities[]);
+
 /*! R-API: The "atmospheric" probability for three-flavor e-to-mu oscillations in vacuum.
   This is not a physically useful probability - the solar probability will always 
   contribute. This is broken out into a separate function ONLY For the purpose of 
